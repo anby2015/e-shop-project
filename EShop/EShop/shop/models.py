@@ -1,4 +1,4 @@
 from django.db import models
 
-class Second(models.Model):
+class team(models.Model):
     num = models.IntegerField()
