@@ -117,7 +117,7 @@ TEMPLATE_DIRS = ( "C:/Users/Dekart/Documents/Work/Labs/python/Project/EShop/ESho
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "C:/Users/SGFusionX3/Documents/pyCharm/EShop/templates/",
+    #"C:/Users/SGFusionX3/Documents/pyCharm/EShop/templates/",
 )
 
 INSTALLED_APPS = (
