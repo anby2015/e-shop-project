@@ -2,6 +2,7 @@ from models import *
 from datetime import datetime
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
 
 class SubCategoryInline(admin.TabularInline):
     model = SubCategory
@@ -24,7 +25,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_per_page = 25
+    list_per_page = 2
     fieldsets = [
         [None, {
             'fields': ('name', ('category', 'seller'), 'price', 'photo', 'description')}]
@@ -36,8 +37,13 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class BannerAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        if not obj.views:
+            obj.views = 0
+        obj.save()
+    readonly_fields = ['views']
     list_per_page = 25
-    list_display = ['name', 'url']
+    list_display = ['name', 'url','views']
     ordering = ['name']
     search_fields = ['name']
 
@@ -52,7 +58,7 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ['title', 'date']
     search_fields = ['title']
     list_filter = ['date']
-    ordering = ['date']
+    ordering = ['-date']
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -89,7 +95,7 @@ class WebFormularMessageAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ['email', 'date', 'message']
     list_filter = ['date', 'state']
-    ordering = ['date']
+    ordering = ['-date']
     search_fields = ['email']
     list_display = ['email', 'date', 'state']
 
@@ -105,7 +111,7 @@ class MessageAdmin(admin.ModelAdmin):
     ]
     readonly_fields = ['author', 'receiver', 'state', 'date', 'message']
     list_filter = ['date']
-    ordering = ['date']
+    ordering = ['-date']
     search_fields = ['author__username', 'receiver__username']
     list_display = ['author', 'receiver', 'date']
 
@@ -120,6 +126,7 @@ class UserAdmin(UserAdmin):
         )
 
 admin.site.unregister(User)
+admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(CompanyProfile, CompanyProfileAdmin)
