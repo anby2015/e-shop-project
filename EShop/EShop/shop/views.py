@@ -1,8 +1,11 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from models import Product, Category
 from django.template import RequestContext
 from shop.models import Banner
 from random import choice
+import os, time
+import subprocess
+from django.conf import settings
 
 def index(request):
     products_list = Product.objects.all()
@@ -24,10 +27,6 @@ def common(request):
         'category_list': category_list,
         'banner': banner,
         }
-import os, time
-import subprocess
-from django.shortcuts import redirect
-from django.conf import settings
 
 def do_mysql_backup(conf,outfile):
     args = []
