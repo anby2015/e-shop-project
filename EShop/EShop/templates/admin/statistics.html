@@ -1,0 +1,90 @@
+﻿{% extends "admin/base_site.html" %}
+{% load adminmedia admin_list i18n %}
+{% load url from future %}
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
+  <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+  <script type="text/javascript" src="/admin/jsi18n/"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.init.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/actions.min.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/calendar.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/admin/DateTimeShortcuts.js"></script>
+  <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+  {{ media.css }}
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+{{ media.js }}
+{% if action_form %}{% if actions_on_top or actions_on_bottom %}
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($) {
+        $("tr input.action-select").actions();
+    });
+})(django.jQuery);
+</script>
+{% endif %}{% endif %}
+{% endblock %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% if not is_popup %}
+  {% block breadcrumbs %}
+    <div class="breadcrumbs">
+      <a href="/admin">
+        {% trans "Home" %}
+      </a>
+       &rsaquo; {% trans "Statistics" %}
+    </div>
+  {% endblock %}
+{% endif %}
+
+{% block coltype %}flex{% endblock %}
+
+{% block content %}
+   <h1>{% trans 'Statictics' %}</h1>
+  <div id="content-main">
+	<div class="results">
+		<form enctype="multipart/form-data" action="" method="post" id="banner_form">
+		{% csrf_token %}
+		<div>
+		  <fieldset class="module aligned ">
+				<div class="field-box">
+					{% if error0 %}
+						<p class="errornote">
+							{% trans 'Wrong date'%}
+						</p>
+					{% endif %}
+					<label for="id_date_0" class="required inline">From:</label>
+						<p class="datetime">Date: <input id="id_date_0" type="text" class="vDateField" name="date_0" size="10" /><br /></p>
+                </div>
+				<div class="field-box">
+					{% if error1 %}
+						<p class="errornote">
+							{% trans 'Wrong date'%}
+						</p>
+					{% endif %}
+					<label for="id_date_1" class="required inline">To:</label>
+						<p class="datetime">Date: <input id="id_date_1" type="text" class="vDateField" name="date_1" size="10" /><br /></p>
+                </div>
+		</fieldset>
+		<div class="submit-row" >
+			<input type="submit" value="{% trans 'View statistics' %}" class="default" name="_search" />
+			<input type="submit" value="{% trans 'View all actions' %}" name="_viewall"  />
+		</div>
+		   <script type="text/javascript">document.getElementById("id_name").focus();</script>
+		<script type="text/javascript">
+		(function($) {
+			var field = null;
+		})(django.jQuery);
+		</script>
+		</div>
+		</form>
+	</div>
+  </div>
+{% endblock %}

@@ -41,7 +41,21 @@
         </table>
         </div>
     {% endfor %}
-	<a href="backup"><b>{% trans 'Backup'%}</b></a>
+	<div class="module">
+		<table>
+        <caption>{% trans 'Management' %}</caption>
+            <tr>
+                <th scope="row"><a href="/admin/backup"><b>{% trans 'Backup'%}</b></a></th>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+			<tr>
+                <th scope="row"><a href="/admin/statistics"><b>{% trans 'Statistics'%}</b></a></th>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </div>
 {% else %}
     <p>{% trans "You don't have permission to edit anything." %}</p>
 {% endif %}

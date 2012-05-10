@@ -110,6 +110,12 @@ class News(models.Model):
 
 class Deal(models.Model):
     """Is added to DB when shopping cart is confirmed"""
+    DEAL_STATES = (
+        (u'A', u'Added'),
+        (u'S', u'Sold'),
+        )
+    action = models.CharField(max_length=1,choices=DEAL_STATES)
     date = models.DateTimeField()
-    products = models.ManyToManyField(Product)
-    sum = models.IntegerField()
+    product = models.ForeignKey(Product)
+    num = models.IntegerField()
+    customer = models.ForeignKey(Profile,null=True,blank=True)
