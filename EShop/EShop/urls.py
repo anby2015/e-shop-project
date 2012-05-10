@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/backup', 'shop.views.backup'),
     url(r'^admin/', include(admin.site.urls),
+    url(r'^$', 'shop.views.index'),
         ),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

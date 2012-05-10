@@ -1,0 +1,31 @@
+{% extends "eshop/banner.html" %}
+{% load i18n %}
+{% load static %}
+{%block content%}
+{%if products_list%}
+	{%for product in products_list%}
+	<div class="eshop_product_box">
+		<h1>{{product.name}}</h1>
+		<img src="{{ product.photo }}" alt="image" />
+		<div class="product_info">
+			<p>
+				{%trans 'category'%} {{product.category}}
+			</p>
+			<h3>{{product.price}}</h3>
+			<form action="/eshop/cart/" method="post">{% csrf_token %}
+				<input type="hidden" id="product_id" name="product_id" value="{{product.id}}"/>
+				<input type="submit" class="buy_button" value="{%trans 'buy'%}"/>
+			</form>
+			<div class="detail_button">
+				<a href="/eshop/detail/{{product.id}}">{%trans 'detail'%}</a>
+			</div>
+		</div>
+		<div class="cleaner">
+			&nbsp;
+		</div>
+	</div>
+	{%endfor%}
+	<div class="cleaner_with_width">&nbsp;</div>
+<!-- end of content right -->
+{%endif%}
+{%endblock%}
