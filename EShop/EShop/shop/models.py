@@ -3,23 +3,17 @@ from django.contrib.auth.forms import User
 from django.utils.translation import ugettext
 from django.core.validators import RegexValidator
 
-class UserInfo(models.Model):
-    name = models.CharField(max_length=30)
+class Profile(models.Model):
+    user = models.OneToOneField(User)
     info = models.TextField()
-    user = models.ForeignKey(User)
     validator=RegexValidator("\+\d{12}",ugettext("Wrong phone number"))
     tel = models.CharField(max_length=15,validators=[validator])
     city = models.CharField(max_length=60)
-    photo = models.ImageField(upload_to='tmp')
-
-
-class Profile(UserInfo):
-    surname = models.CharField(max_length=30)
+    photo = models.ImageField(upload_to='shop/static/profiles')
     def __unicode__(self):
-        return self.surname
+        return self.user.username
 
-
-class CompanyProfile(UserInfo):
+class CompanyProfile(Profile):
     COMPANY_STATES = (
         (u'A', u'Active'),
         (u'B', u'Banned'),
@@ -27,7 +21,7 @@ class CompanyProfile(UserInfo):
     website = models.URLField()
     state = models.CharField(max_length=1, choices=COMPANY_STATES)
     def __unicode__(self):
-        return self.name
+        return self.user.username
 
 
 class Category(models.Model):
@@ -54,11 +48,11 @@ class Product(models.Model):
         verbose_name = ugettext("Product")
         verbose_name_plural = ugettext("Products")
     name = models.CharField(max_length=100)
-    sub_category = models.ForeignKey(SubCategory,verbose_name=ugettext("Subcategory"))
-    seller = models.ForeignKey(User)
+    category = models.ForeignKey(SubCategory,verbose_name=ugettext("Subcategory"))
+    seller = models.ForeignKey(Profile)
     price = models.FloatField()
     description = models.TextField()
-    photo = models.ImageField(upload_to='tmp')
+    photo = models.ImageField(upload_to='shop/static/products')
     def __unicode__(self):
         return self.name
 
@@ -72,8 +66,8 @@ class Message(models.Model):
         )
     state = models.CharField(max_length=1, choices=MESSAGE_STATES)
     date = models.DateTimeField()
-    author = models.ForeignKey(User,related_name='author')
-    receiver = models.ForeignKey(User,related_name='receiver')
+    author = models.ForeignKey(Profile,related_name='author')
+    receiver = models.ForeignKey(Profile,related_name='receiver')
     message = models.TextField()
 
 class WebFormularMessage(models.Model):
@@ -96,7 +90,8 @@ class Banner(models.Model):
         verbose_name_plural = ugettext("Banners")
     name = models.CharField(max_length=100)
     url = models.URLField()
-    picture = models.ImageField(upload_to='tmp')
+    picture = models.ImageField(upload_to='shop/static/banners')
+    views = models.IntegerField()
     def __unicode__(self):
         return self.name
 
@@ -104,11 +99,11 @@ class Banner(models.Model):
 class News(models.Model):
     class Meta:
         verbose_name = ugettext("News")
-        verbose_name_plural = ugettext("News_p")
+        verbose_name_plural = ugettext("News")
     date = models.DateTimeField()
     title = models.CharField(max_length=300)
     text = models.TextField()
-    picture = models.ImageField(upload_to='tmp')
+    picture = models.ImageField(upload_to='shop/static/news')
     def __unicode__(self):
         return self.title
 

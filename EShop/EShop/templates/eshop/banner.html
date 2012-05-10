@@ -1,0 +1,14 @@
+{% extends "eshop/category.html" %}
+{% load i18n %}
+{% load static %}
+{% block banner %}
+    {% if banner %}
+        <ul>
+            <div class="image_panel">
+                <a href="{{ banner.url }}">
+                    <img src="{{ banner.picture}}" alt="{{ banner.name }}" width="100" height="150"/>
+                </a>
+            </div>
+        </ul>
+    {% endif %}
+{% endblock %}
