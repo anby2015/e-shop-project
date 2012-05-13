@@ -2,7 +2,8 @@ from django.conf.urls.defaults import patterns, include, url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from EShop.shop.views import profile, register, requires_login, edit_user_profile, show_profile, send_message
+from EShop.shop.views import profile, register, requires_login, edit_user_profile, show_profile, send_message,\
+    purchase
 from django.contrib.auth.views import login, logout
 admin.autodiscover()
 
@@ -26,4 +27,5 @@ urlpatterns = patterns('',
     (r'^sendmessage/(?P<user_id>\d+)$', requires_login(send_message)),
     (r'^accounts/profile/edit/$', requires_login(edit_user_profile)),
     (r'^accounts/registration/$', register),
+    (r'^accounts/profile/purchase/$', requires_login(purchase)),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

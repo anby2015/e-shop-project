@@ -76,12 +76,11 @@ class CompanyProfileAdmin(admin.ModelAdmin):
     list_per_page = 25
     fieldsets = [
         [None, {
-            'fields': ('user', 'photo', ('city', 'tel'), 'website', 'state', 'info')}]
+            'fields': ('user', 'photo', ('city', 'tel'), 'website', 'account', 'info')}]
     ]
     ordering = ['user']
-    list_display = ['user', 'state']
+    list_display = ['user', 'website']
     search_fields = ['user__username', 'name']
-    list_filter = ['state']
 
 
 class WebFormularMessageAdmin(admin.ModelAdmin):
@@ -124,6 +123,20 @@ class UserAdmin(UserAdmin):
             ),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
         )
+    
+class PurchaseAccountAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return False
+    fieldsets = [
+        [None, {
+            'fields': ('user', 'card', 'sum', 'date')}]
+    ]
+    list_per_page = 25
+    list_filter = ['date']
+    ordering = ['-date']
+    readonly_fields = ['user', 'card', 'sum', 'date']
+    search_fields = ['user__user__username']
+    list_display = ['user', 'card', 'sum', 'date']
 
 admin.site.unregister(User)
 admin.site.unregister(Group)
@@ -137,3 +150,4 @@ admin.site.register(WebFormularMessage, WebFormularMessageAdmin)
 admin.site.register(Banner, BannerAdmin)
 admin.site.register(News, NewsAdmin)
 admin.site.register(Message, MessageAdmin)
+admin.site.register(PurchaseAccount, PurchaseAccountAdmin)

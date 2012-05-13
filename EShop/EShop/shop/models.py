@@ -14,12 +14,8 @@ class Profile(models.Model):
         return self.user.username
 
 class CompanyProfile(Profile):
-    COMPANY_STATES = (
-        (u'A', u'Active'),
-        (u'B', u'Banned'),
-        )
     website = models.URLField()
-    state = models.CharField(max_length=1, choices=COMPANY_STATES)
+    account = models.IntegerField()
     def __unicode__(self):
         return self.user.username
 
@@ -106,6 +102,17 @@ class News(models.Model):
     picture = models.ImageField(upload_to='shop/static/news')
     def __unicode__(self):
         return self.title
+
+class PurchaseAccount(models.Model):
+    class Meta:
+        verbose_name = ugettext("Purchase")
+        verbose_name_plural = ugettext("Purchase")
+    date = models.DateTimeField()
+    user = models.ForeignKey(CompanyProfile)
+    card = models.CharField(max_length=16)
+    sum = models.IntegerField()
+    def __unicode__(self):
+        return self.user.user.username
 
 
 class Deal(models.Model):

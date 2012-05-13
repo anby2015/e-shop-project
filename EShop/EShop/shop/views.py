@@ -8,7 +8,7 @@ import os, time
 from datetime import datetime
 import subprocess
 from django.conf import settings
-from EShop.shop.models import SubCategory
+from EShop.shop.models import SubCategory, PurchaseAccount
 from EShop.shop.forms import ProfileForm, CompanyProfileForm
 from django.db.models.aggregates import Sum
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -17,6 +17,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.forms.models import inlineformset_factory
 from django.contrib.auth.forms import User
+from django.utils.translation import ugettext
+from datetime import datetime
+import re
 
 def get_users_profile(user):
     try:
@@ -91,7 +94,8 @@ def register(request):
                 profile = Profile()
             else:
                 profile = CompanyProfile()
-                profile.state = 'a'
+                profile.account = 1
+            profile.user= new_user
             profile.save()
             return HttpResponseRedirect("/accounts/login")
     
@@ -100,6 +104,37 @@ def register(request):
                                                              'form': form, 
                                                              }, context_instance=RequestContext(request))
 
+def purchase(request):
+    profile = get_users_profile(request.user)
+    if isinstance(profile, CompanyProfile):
+        error = None
+        if request.method == 'POST':
+            card = request.POST['card']
+            sum = request.POST['sum']
+            pattern = re.compile("\d{16}")
+            if pattern.match(card) and len(card)==16:
+                try:
+                    sum = int(sum)
+                    if sum>0:
+                        profile.account+=sum
+                        profile.save()
+                        operation = PurchaseAccount()
+                        operation.user = profile
+                        operation.sum = sum
+                        operation.date = datetime.now()
+                        operation.card = card[:4]+"*"*8+card[-4:]
+                        operation.save()
+                        return HttpResponseRedirect("/accounts/profile")
+                    else:
+                        error = ugettext("Wrong sum")
+                except:
+                    error = ugettext("Wrong sum")
+            else:
+                error = ugettext("Invalid credit number")
+        return render_to_response("profiles/purchase.html", {'error':error}, context_instance=RequestContext(request))
+    else:
+        return HttpResponseRedirect("/")
+    
 
 def banner():
     banner = Banner.objects.all()
