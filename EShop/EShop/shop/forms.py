@@ -13,7 +13,7 @@ class ProfileForm(ModelForm):
 class CompanyProfileForm(ModelForm):
     class Meta:
         model = CompanyProfile
-        exclude = ('user','state',)
+        exclude = ('user','account',)
         widgets = {
             'info': Textarea(attrs={'cols': 80, 'rows': 20}),
         }

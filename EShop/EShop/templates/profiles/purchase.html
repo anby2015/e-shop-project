@@ -1,0 +1,22 @@
+{% extends "eshop/category.html" %}
+{% load i18n %}
+{% block content %}
+  <h1>{% trans 'Purchase' %}</h1>
+  <form action="" method="post">{% csrf_token %}
+	<table>
+		{% if error %}
+			<caption>{{error}}</caption>
+		{% endif %}
+		<tr>
+			<td>{% trans 'Card number:' %}</td>
+			<td><input type="text" name="card"/></td>
+		</tr>
+		<tr>
+			<td>{% trans 'Sum:'%}</td>
+			<td><input type="text" name="sum"/></td>
+		</tr>
+	</table>
+	<input type="submit" value="Submit" />
+</form>
+  
+{% endblock %}
