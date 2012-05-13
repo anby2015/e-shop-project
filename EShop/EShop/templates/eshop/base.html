@@ -1,0 +1,33 @@
+﻿{% load static %}
+{% load i18n %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{%trans "EShop title"%}</title>
+<link href="{%get_static_prefix%}css/eshop_style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="eshop_container">
+   
+   {%block header%}
+   <a href="/" class="current">
+   <div id="eshop_header">
+   
+   
+    </div>
+   </a>
+   {%endblock%}
+ <!-- end of header -->
+
+    {%block base_content%}
+        
+    {%endblock%}
+    
+    {%block footer%}
+    <div id="eshop_footer">
+    
+        {%trans "Copyright © 2012"%}</div>
+    {%endblock%}
+</div> <!-- end of container -->
+</body>
+</html>

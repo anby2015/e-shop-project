@@ -1,0 +1,14 @@
+{% extends "eshop/base_content.html" %}
+{% load i18n %}
+{%block category%}
+        	<div class="eshop_content_left_section">
+            	<h1>{%trans 'categories'%}</h1>
+            	{%if category_list%}
+                <ul>
+                	{%for category in category_list%}
+                    <li><a href="/eshop/category/{{category.id}}">{{category.name}}</a></li>
+                    {%endfor%}
+            	</ul>
+            	{%endif%}
+</div> <!-- end of content left -->
+{%endblock%}

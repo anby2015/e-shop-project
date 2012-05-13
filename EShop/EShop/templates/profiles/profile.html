@@ -1,0 +1,11 @@
+{% extends "eshop/category.html" %}
+
+{% block content %}
+  <h1>Profile</h1>
+  
+  <p><img src="/{{ profile.photo }}"  width="180" height='180'/></p>
+  <p>Information: {{profile.info}}</p>
+  <p>Telephone: {{profile.tel }}</p>
+  <p>City: {{profile.city}}</p>
+  <a href="./edit">Edit</a>
+{% endblock %}

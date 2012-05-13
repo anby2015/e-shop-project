@@ -1,0 +1,94 @@
+﻿{% extends "admin/base_site.html" %}
+{% load adminmedia admin_list i18n %}
+{% load url from future %}
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
+  <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+  <script type="text/javascript" src="/admin/jsi18n/"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/jquery.init.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/actions.min.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/calendar.js"></script>
+  <script type="text/javascript" src="{% admin_media_prefix %}js/admin/DateTimeShortcuts.js"></script>
+  <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
+  {{ media.css }}
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+{{ media.js }}
+{% if action_form %}{% if actions_on_top or actions_on_bottom %}
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($) {
+        $("tr input.action-select").actions();
+    });
+})(django.jQuery);
+</script>
+{% endif %}{% endif %}
+{% endblock %}
+
+{% block bodyclass %}change-list{% endblock %}
+
+{% if not is_popup %}
+  {% block breadcrumbs %}
+    <div class="breadcrumbs">
+      <a href="/admin">
+        {% trans "Home" %}
+      </a>
+       &rsaquo; <a href="/admin/statistics">
+        {% trans "Statistics" %}
+      </a>
+		&rsaquo; {% trans "All" %}
+    </div>
+  {% endblock %}
+{% endif %}
+
+{% block coltype %}flex{% endblock %}
+
+{% block content %}
+   <h1>{% trans 'Statictics' %}</h1>
+  <div id="content-main">
+	{% if deal_list %}
+		<div class="results">
+			<div class="field-box">
+			<table cellspacing="0" id="result_list">
+			<thead>
+			<tr><th scope="col">{% trans 'Product' %}</th><th scope="col">{% trans 'Customer' %}</th><th scope="col">{% trans 'Action' %}</th>
+			<th scope="col">{% trans 'Date' %}</th><th scope="col">{% trans 'Number' %}</th></tr>
+			</thead>
+			<tbody>
+				{% for deal in deal_list.object_list %}
+					<tr class="{% cycle 'row1' 'row2' %}">
+						<th>{{ deal.product }}</th>
+						{% if deal.customer%}
+							<td>{{ deal.customer }}</td>
+						{% else %}
+							<td>---</td>
+						{% endif %}
+						{% if deal.action == 'A'%}
+							<td>{% trans 'Added' %}</td>
+						{% else %}
+							<td>{% trans 'Sold' %}</td>
+						{% endif %}
+						<td>{{ deal.date }}</td>
+						<td>{{ deal.num }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+			</table>
+			</div>
+		</div>
+		{% if paginator_require %}
+			<p class="paginator">
+				{% for i in pages %}
+					{{ i }}
+				{% endfor %}
+			</p>
+		{% endif %}
+	{% endif %}
+  </div>
+{% endblock %}
