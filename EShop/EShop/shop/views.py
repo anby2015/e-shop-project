@@ -91,11 +91,7 @@ def register(request):
                 profile = Profile()
             else:
                 profile = CompanyProfile()
-            profile.user = new_user
-            try:
-                p.state = profile.state
-            except:
-                pass
+                profile.state = 'a'
             profile.save()
             return HttpResponseRedirect("/accounts/login")
     
