@@ -1,0 +1,14 @@
+{% extends "eshop/category.html" %}
+
+{% block content %}
+  <h1>Company Profile</h1>
+  <p><img src="/{{ cprofile.photo }}" width="180" height='180'/></p>
+  <p>Information: {{cprofile.info}}</p>
+  <p>Telephone: {{cprofile.tel }}</p>
+  <p>City: {{cprofile.city}}</p>
+  <p>Site: {{cprofile.website}}</p>
+  <p>State: {{cprofile.state}}</p>
+  <a href="./edit">Edit</a>
+  <a href="./purchase">Purchase</a>
+  
+{% endblock %}

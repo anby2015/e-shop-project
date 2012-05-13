@@ -2,16 +2,108 @@
 from django.shortcuts import render_to_response, redirect
 from models import Product, Category
 from django.template import RequestContext
-from shop.models import Banner,Deal
+from shop.models import Banner,Deal,Profile,CompanyProfile
 from random import choice
 import os, time
 from datetime import datetime
 import subprocess
 from django.conf import settings
 from EShop.shop.models import SubCategory
+from EShop.shop.forms import ProfileForm, CompanyProfileForm
 from django.db.models.aggregates import Sum
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.safestring import mark_safe
+from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse, HttpResponseRedirect
+from django.forms.models import inlineformset_factory
+from django.contrib.auth.forms import User
+
+def get_users_profile(user):
+    try:
+        profile = CompanyProfile.objects.get(user=user)
+        return profile
+    except:
+        profile = Profile.objects.get(user=user)
+        return profile
+    
+def edit_user_profile(request):
+    profile = get_users_profile(request.user)
+    if isinstance(profile, CompanyProfile):
+        type = 'c'
+    else:
+        type = 'b'
+    if request.method == "POST":
+        if type == 'c':
+            form = CompanyProfileForm(request.POST, request.FILES, instance=profile)
+        else:
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            p = form.save(commit=False)
+            p.user = request.user
+            p.save()
+            return HttpResponseRedirect("/accounts/profile")
+    else:
+        if type == 'c':
+            form = CompanyProfileForm(instance=profile)
+        else:
+            form = ProfileForm(instance=profile)
+            
+    return render_to_response("profiles/editprofile.html", {
+                                         "form": form,
+                                        } , context_instance=RequestContext(request))
+
+
+def requires_login(view):
+    def new_view(request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect("/accounts/login")
+        return view(request, *args, **kwargs)
+    return new_view
+
+def send_message(request, user_id):
+    pass
+
+def profile(request):
+    profile = get_users_profile(request.user)
+    if isinstance(profile, CompanyProfile):
+        return render_to_response('profiles/companyprofile.html', {'cprofile':profile}
+                                  , context_instance=RequestContext(request))
+    else:
+        return render_to_response('profiles/profile.html', {'profile':profile}
+                                  , context_instance=RequestContext(request))
+        
+def show_profile(request, user_id):
+    profile = get_users_profile(User.objects.get(id=user_id))
+    if isinstance(profile, CompanyProfile):
+        return render_to_response('profiles/showcprofile.html', {'cprofile':profile}
+                                  , context_instance=RequestContext(request))
+    else:
+        return render_to_response('profiles/showprofile.html', {'profile':profile}
+                                  , context_instance=RequestContext(request))
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            type = request.POST['profile_type']
+            if type == 'Private account':
+                profile = Profile()
+            else:
+                profile = CompanyProfile()
+            profile.user = new_user
+            try:
+                p.state = profile.state
+            except:
+                pass
+            profile.save()
+            return HttpResponseRedirect("/accounts/login")
+    
+    form = UserCreationForm()
+    return render_to_response("registration/register.html", {
+                                                             'form': form, 
+                                                             }, context_instance=RequestContext(request))
+
 
 def banner():
     banner = Banner.objects.all()
