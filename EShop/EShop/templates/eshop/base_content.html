@@ -5,11 +5,12 @@
 
         <div id="eshop_content_left">
             {% block category %}
-
+				
             {% endblock %}
 
             {% block login %}
-
+             {% load loginFilter %}
+ 			 {{ user|loginFilter }}
             {% endblock %}
 
             {% block banner %}
@@ -22,7 +23,7 @@
 
             {% endblock %}
         </div>
-
+        
         <div class="cleaner_with_height">&nbsp;</div>
     </div> <!-- end of content -->
 {% endblock %}

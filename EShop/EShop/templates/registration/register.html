@@ -1,0 +1,22 @@
+{% extends "eshop/category.html" %}
+
+{% block content %}
+  <h1>Create an account</h1>
+
+  <form action="" method="post">
+      {% csrf_token %}
+      <table>
+      {% for field in form %}
+      <tr><td>{{ field.label_tag }}</td><td>{{ field }}</td></tr>
+      {% endfor %}
+      
+      <!-- {{ form.as_p }} -->
+      <tr><td>Account type</td><td><select name="profile_type">
+      	<option selected value="Private account">Private account</option>
+      	<option value="Business account">Business account</option>
+      </select></td></tr>
+      </table>
+      <input type="submit" value="Create the account">
+      
+  </form>
+{% endblock %}
